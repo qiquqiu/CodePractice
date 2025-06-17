@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/CodePractice.iml" filepath="$PROJECT_DIR$/CodePractice.iml" />
+      <module fileurl="file://$PROJECT_DIR$/kamacode/kamacode.iml" filepath="$PROJECT_DIR$/kamacode/kamacode.iml" />
+      <module fileurl="file://$PROJECT_DIR$/lanqiao/lanqiao.iml" filepath="$PROJECT_DIR$/lanqiao/lanqiao.iml" />
+      <module fileurl="file://$PROJECT_DIR$/leetcode/leetcode.iml" filepath="$PROJECT_DIR$/leetcode/leetcode.iml" />
+      <module fileurl="file://$PROJECT_DIR$/newcoder/newcoder.iml" filepath="$PROJECT_DIR$/newcoder/newcoder.iml" />
+      <module fileurl="file://$PROJECT_DIR$/other/other.iml" filepath="$PROJECT_DIR$/other/other.iml" />
+    </modules>
+  </component>
+</project>

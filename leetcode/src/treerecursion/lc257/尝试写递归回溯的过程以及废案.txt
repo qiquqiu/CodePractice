@@ -1,0 +1,80 @@
+废案1
+        if (node.left == null && node.right == null) {
+            return lastPath;
+        } else {
+            lastPath.append(node.val);
+            res.add(getPath(node.left, lastPath).toString());
+            res.add(getPath(node.right, lastPath).toString());
+        }
+废案2，最接近成功
+        if (node == null) {
+            return;
+        }
+        lastPath.append(node.val);
+        if (node.left == null && node.right == null) {
+            res.add(lastPath.toString());
+        }
+        if (node.left != null) {
+            getPath(node.left, lastPath);
+        }
+        if (node.right != null) {
+            getPath(node.right, lastPath);
+        }
+废案3，返回值是StringBuilder
+        if (node == null) {
+            return lastPath;
+        }
+        lastPath.append(node.val);
+        if (node.left == null && node.right == null) {
+            return lastPath;
+        }
+        if (node.left != null) {
+            res.add(getPath(node.left, lastPath).toString());
+        }
+        if (node.right != null) {
+            res.add(getPath(node.right, lastPath).toString());
+        }
+        System.out.println("最后一句被执行了");
+        return lastPath;
+
+最终成功方案：
+    public void getPath(TreeNode node, List<String> lastPath) {
+        if (node == null) {
+            return;
+        }
+        lastPath.add(node.val + "->");
+        if (node.left == null && node.right == null) {
+            String lastUnit = lastPath.removeLast();
+            String dealUnit = lastUnit.substring(0, lastUnit.length() - 2);
+            lastPath.add(dealUnit);
+            res.add(list2String(lastPath));
+        }
+        if (node.left != null) {
+            getPath(node.left, lastPath);
+            lastPath.removeLast();
+        }
+        if (node.right != null) {
+            getPath(node.right, lastPath);
+            lastPath.removeLast();
+        }
+    }
+之前是没有想清楚，val并不一定是一位数的，而且还要考虑加“->”，所以用StringBuilder来存路径并不合理
+所以用List<String>来存路径结果；而最重要最关键的就是：
+    “回溯”:Line54和Line58，与Line45的add呼应
+注意一些细节：在Line50之后不用紧接着就删除，因为每一个添加都有一个弹出栈帧时候（回溯）对应的删除;
+注意去掉最后一个“->”;注意将每个路径结果lastPath做一下list2String转换;目测着尚可优化
+
+废案2失败的深层原因的深度分析：
+https://yiyan.baidu.com/share/FDKHh2gxGh
+对话内容修正：
+1.实际上这里两种方法的path参数都是引用数据类型，但是其实由于String类型每次做改变之后就是得到一个新的
+并不是在原基础上改变的，所以说用的时候完全可以把String类型当作基本数据类型看待。也就是说本质原因其实就是
+关键参数设置为基本数据类型还是应用数据类型的区别（或者说总是改变后在原基础上得到新值还是共享原数据在其基础上改变）
+不仅仅如此，方法一使用基本数据类型设置参数的时候也有细节：即不能先改变path的值(path += "->")再递归传入，
+而应该在递归处直接传入(path + "->")整体，这也保证了回溯回来能够找到当前栈帧“初始”的path
+2.后面两个对话中的方法二说错了，实际上我是用的List<String>来存的path而不是StringBuilder
+不过反正都是引用数据类型，关键的点还是一样的。
+3.需要澄清一点：无论是非静态（实例）变量还是静态（类）变量，它们都不属于栈帧的内容。
+栈帧中存储的是局部变量（包括方法的参数），而非静态变量是对象的属性，存储在堆中；
+静态变量是类的属性，存储在方法区（在Java HotSpot VM中，这部分通常被称为永久代
+（PermGen）或元空间（Metaspace））。
